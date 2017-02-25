@@ -20,52 +20,43 @@ namespace _4___ShowMeTheTickets.Controllers
 
         private static readonly string[] Scopes = { "(no scope)" };
 
-        private static readonly Uri RedirectUri = new Uri("https://localhost:50442/getEvents");
+        //private static readonly Uri RedirectUri = new Uri("https://localhost:50442/getEvents");
 
         public HomeController()
         {
-            Debug.WriteLine("Start\n");
-
             _viagogoClient = new ViagogoClient(new ProductHeaderValue("ShowMeTheTickets"), CLIENT_ID,
             CLIENT_SECRET);
 
-            getEvents();
+            
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-
+            await getEvents();
             return View();
         }
 
-        /* Aware that this shouldn't be a void. At the moment the only way I seem to be able to return a
-         category without getting a permission error is by doing it this way*/
-        public async void getEvents()
+       
+        public async Task getEvents()
         {
-            Debug.WriteLine("Getting client access token\n");
+            Debug.WriteLine("Obtaining client access token\n");
             var token = await _viagogoClient.OAuth2.GetClientAccessTokenAsync(Scopes);
+            Debug.WriteLine("Token received\n");
             await _viagogoClient.TokenStore.SetTokenAsync(token);
             Debug.WriteLine(token);
 
             Debug.WriteLine("Getting all events in category\n");
-            var events = await _viagogoClient.Events.GetAllByCategoryAsync(1207);
-            var eventName = events[0].Name;
-            
-            Debug.WriteLine("Event 1 title: " + eventName + "\n");
+            var events = await _viagogoClient.Events.GetAllByCategoryAsync(4400);
+
+            Debug.WriteLine(events.Count + " events found\n");
+            if (events.Count > 0)
+            {
+                string eventName = events[0].Name;
+                Debug.WriteLine("Event 1 title: " + eventName + "\n");
+            }
+
+
         }
-
-
-        
-
-
-
-
-
-
-
-
-
-
 
 
     }
