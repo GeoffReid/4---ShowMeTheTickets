@@ -1,14 +1,48 @@
 ﻿
 @{
-    ViewBag.Title = "Mirrored Theory";
+    ViewBag.Title = "Category: " + ViewBag.categoryID;
 }
 
 <h2>@ViewBag.Title</h2>
 
 <h3>Events</h3>
 
-<ul>
-    <li><a href="http://www.google.com">Google</a></li>
-    <li><a href="http://www.bing.com">Bing</a></li>
-    <li><a href="http://www.yahoo.com">Yahoo</a></li>
-</ul>
+@if (ViewBag.eventList == null)
+{
+    <h4>No events found</h4>
+}
+else
+{
+    <div>
+        <table id="t01">
+            <thead>
+            <th>Date</th>
+            <th>Artist</th>
+            <th>Location</th>
+
+            </thead>
+            
+
+            @foreach (var item in ViewBag.eventList)
+            {
+
+                <tr>
+                    <td>
+                        @item.StartDate
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @(item.Venue.Name + ", " + item.Venue.City + ", " + item.Venue.Country.Name)
+                    </td>
+
+
+                </tr>
+
+            }
+
+        </table>
+    </div>
+}
+

@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-
 namespace _4___ShowMeTheTickets.Controllers
 {
     public class HomeController : Controller
@@ -17,8 +16,8 @@ namespace _4___ShowMeTheTickets.Controllers
         private const string CLIENT_ID = "TaRJnBcw1ZvYOXENCtj5";
         private const string CLIENT_SECRET = "ixGDUqRA5coOHf3FQysjd704BPptwbk6zZreELW2aCYSmIT8XJ9ngvN1MuKV";
         private readonly IViagogoClient _viagogoClient;
-
         private static readonly string[] Scopes = { "(no scope)" };
+        public static int categoryID = 1205;
 
         //private static readonly Uri RedirectUri = new Uri("https://localhost:50442/getEvents");
 
@@ -45,14 +44,23 @@ namespace _4___ShowMeTheTickets.Controllers
             await _viagogoClient.TokenStore.SetTokenAsync(token);
             Debug.WriteLine(token);
 
-            Debug.WriteLine("Getting all events in category\n");
-            var events = await _viagogoClient.Events.GetAllByCategoryAsync(4400);
 
+            Debug.WriteLine("Getting all events in category\n");
+            var events = await _viagogoClient.Events.GetAllByCategoryAsync(categoryID);
+            ViewBag.categoryID = categoryID;
             Debug.WriteLine(events.Count + " events found\n");
             if (events.Count > 0)
             {
-                string eventName = events[0].Name;
-                Debug.WriteLine("Event 1 title: " + eventName + "\n");
+                ViewBag.eventList = events;
+
+                Debug.WriteLine(events[0].ListingsLink + "\n");
+                Debug.WriteLine(events[0].Venue.City + "\n");
+                Debug.WriteLine(events[0].Venue.Country.Name + "\n");
+                Debug.WriteLine(events[0].Venue.Name + "\n");
+                Debug.WriteLine(events[0].MinTicketPrice.Display + "\n");
+                Debug.WriteLine(events[0].MinTicketPrice.Amount + "\n");
+
+
             }
 
 
